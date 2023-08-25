@@ -1,0 +1,24 @@
+{
+  "id": 123,
+  "name": "Judy",
+  "store": 1,
+  "graduated": true,
+  "age": 23,
+  "courseList":[
+  "hey","hehe"
+],
+"pet":{
+  "age": 3,
+  "graduated": false
+},
+  "petList": [
+    {
+      "age": 3,
+      "graduated": false
+    },
+    {
+      "age": 3,
+      "graduated": false
+    }
+  ]
+}
