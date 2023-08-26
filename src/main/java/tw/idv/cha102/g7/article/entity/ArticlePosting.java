@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Data
 @Entity
@@ -20,25 +21,15 @@ public class ArticlePosting {
 //    @Column(name="mem_id")
 //    private Integer memId;
 
-//    @Column(name="ac_type_id")
-//    private Integer acTypeId;
+    @Column(name="ac_type_id")
+    private Integer acTypeId;
 
     @Column(name="article_title")
     private String articleTitle;
 
-//    @Column(name="article_time")
-//    private Date articleTime;
-
-//    @Column(name="article_like")
-//    private Integer articleLike;
-//
-//    @Column(name="comment_num")
-//    private Integer commentNum;
-
     @Column(name="article_con")
     private String articleContent;
 
-//    @Column(name="article_state")
-//    private Short articleSta;
+
 
 }

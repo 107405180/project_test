@@ -278,7 +278,7 @@
 
 async function fetchArticleList() {
     try {
-        const response = await fetch('http://localhost:8080/u-and-me/article/articles');
+        const response = await fetch('http://localhost:8080/BackEnd/articles');
         const articleList = await response.json();
 
             const dataTableList = document.getElementById("dataTableList");
