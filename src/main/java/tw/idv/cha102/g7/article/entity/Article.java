@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Data
@@ -12,7 +13,9 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="article")
-public class Article {
+public class Article implements Serializable {
+    // 為了照片而實作序列化
+    private static final long serialVersionUID = 2072014924350494700L;
     @Id
     @Column(name="article_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +44,8 @@ public class Article {
 
     @Column(name="article_state")
     private Short articleSta;
+
+    @Column(name = "article_pic")
+    private byte[] cover;
 
 }

@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import tw.idv.cha102.g7.article.entity.ArticlePosting;
 
 @Repository
-public interface ArticlePostingPostingRepository extends JpaRepository <ArticlePosting,Integer>{
+public interface ArticlePostingRepository extends JpaRepository<ArticlePosting, Integer> {
 
 }

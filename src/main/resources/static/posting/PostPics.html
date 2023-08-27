@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic File Upload</title>
+</head>
+<body>
+<form id="postForm">
+    <div class="mb-3">
+        <h2>上傳照片或影片</h2>
+        <div id="fileInputs">
+            <!-- 初始的檔案上傳欄位 -->
+            <input type="file" name="files" class="form-control" enctype="multipart/form-data" multiple="multiple" />
+        </div>
+        <button type="button" id="addFileInput" class="btn btn-secondary">新增欄位</button>
+    </div>
+    <button type="submit" class="btn btn-primary-send">發表</button>
+</form>
+<script>
+    const url = "http://localhost:8080/post_pics";
+    const postForm = document.getElementById('postForm');
+    const fileInputsContainer = document.getElementById('fileInputs');
+    const addFileInputButton = document.getElementById('addFileInput');
+
+    let fileInputCount = 1;
+
+// 新增檔案欄位的onclick事件監聽
+    addFileInputButton.addEventListener('click', function () {
+        const newFileInput = document.createElement('input');
+        newFileInput.type = 'file';
+        newFileInput.name = 'files';
+        newFileInput.className = 'form-control';
+        fileInputsContainer.appendChild(newFileInput);
+        fileInputCount++;
+    });
+
+    postForm.addEventListener('submit', function (e) {
+        event.preventDefault(e);
+
+        const formData = new FormData(postForm);
+
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+</body>
+</html>

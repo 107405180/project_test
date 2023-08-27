@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<form id="postForm">
+    <div class="mb-3">
+        <label for="photo" class="form-label">上傳照片或影片</label>
+        <input type="file" id="cover0" name="cover0" class="form-control">
+        <input type="file" id="cover1" name="cover1" class="form-control">
+    </div>
+    <!-- 在JS設定button的監聽 -->
+    <button type="submit" class="btn btn-primary-send">發表</button>
+</form>
+<script>
+    const url = "http://localhost:8080/post_pic";
+    const postForm = document.getElementById('postForm'); // 獲取表單元素
+
+    postForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // 阻止表單默認提交行為
+
+        const cover0_el = document.getElementById("cover0");
+        const cover1_el = document.getElementById("cover1");
+
+        const cover0 = cover0_el.files[0];
+        const cover1 = cover1_el.files[0];
+
+        const fileReader = new FileReader();
+
+        fileReader.onload = async event => {
+            const base64Str = btoa(fileReader.result);
+
+            const dataToSend = {
+                cover0: base64Str
+            };
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataToSend)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        };
+
+        fileReader.readAsBinaryString(cover0);
+    });
+</script>
+</body>
+</html>

@@ -7,7 +7,7 @@ import tw.idv.cha102.g7.article.entity.ArticlePosting;
 public interface ArticlePostingService {
 
     // 新增文章
-    void postArticle(ArticlePosting article);
+    public void postArticle(ArticlePosting article);
 
 }
 
