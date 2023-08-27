@@ -6,7 +6,7 @@
     <title>Dynamic File Upload</title>
 </head>
 <body>
-<form id="postForm">
+<form id="picForm">
     <div class="mb-3">
         <h2>上傳照片或影片</h2>
         <div id="fileInputs">
@@ -19,7 +19,7 @@
 </form>
 <script>
     const url = "http://localhost:8080/post_pics";
-    const postForm = document.getElementById('postForm');
+    const picForm = document.getElementById('picForm');
     const fileInputsContainer = document.getElementById('fileInputs');
     const addFileInputButton = document.getElementById('addFileInput');
 
@@ -35,10 +35,10 @@
         fileInputCount++;
     });
 
-    postForm.addEventListener('submit', function (e) {
+    picForm.addEventListener('submit', function (e) {
         event.preventDefault(e);
 
-        const formData = new FormData(postForm);
+        const formData = new FormData(picForm);
 
         fetch(url, {
             method: "POST",
