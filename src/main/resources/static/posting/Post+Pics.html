@@ -121,11 +121,11 @@
 
 
             </div>
-            <!-- 把要傳送的東西包成表單 -->
+            <!-- 把要傳送的東西包成postForm表單 -->
             <form id="postForm">
                 <div class="mb-3 mt-4">
                     <label for="title" class="form-label">標題</label>
-                    <!-- 給要被傳送到後端的標籤一個id值 -->
+                    <!-- 給要被傳送到後端的標籤id值 -->
                     <input type="text" id="title" name="title" class="form-control" required>
                 </div>
                 <div class="mb-3 mt-4">
@@ -134,24 +134,28 @@
                     <textarea id="content" name="content" rows="6" class="form-control" required></textarea>
                 </div>
 
-
-                <!-- 上傳多個檔案 -->
-                <form id="picForm">
-                    <div class="mb-3">
-                        <h5>上傳照片或影片</h5>
-                        <div id="fileInputs" style="margin-bottom: 20px;">
-                            <!-- 預設的檔案上傳欄位 -->
-                            <input type="file" name="files" class="form-control" enctype="multipart/form-data"
-                                   multiple="multiple" />
-                        </div>
-                        <button type="button" id="addFileInput" class="btn btn-secondary"
-                                style="margin-bottom: 40px;">新增欄位</button>
-                    </div>
-                </form>
-
                 <!-- 在JS設定button的監聽 -->
                 <button type="submit" class="btn btn-primary-send">發表</button>
             </form>
+
+            <!-- 上傳多個檔案 -->
+            <form id="picForm">
+                <div class="mb-3">
+                    <h5>上傳照片或影片</h5>
+                    <div id="fileInputs" style="margin-bottom: 20px;">
+                        <!-- 預設的檔案上傳欄位 -->
+                        <!-- 後端的@RequestParam參數 要跟前端的name相同命名 -->
+                        <input type="file" name="files" class="form-control" enctype="multipart/form-data"
+                               multiple="multiple" />
+                    </div>
+                    <button type="button" id="addFileInput" class="btn btn-secondary"
+                            style="margin-bottom: 40px;">新增欄位</button>
+                </div>
+                <button type="submit" class="btn btn-primary-send">發表</button>
+            </form>
+
+
+
 
         </main>
     </div>
@@ -200,13 +204,13 @@
         </div>
     </footer>
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
-<!--    <script src="post.js"></script>-->
+    <script src="post.js"></script>
     <script>
-        const postURL = "http://localhost:8080/post";
+        const url = "http://localhost:8080/post";
         const post_picURL = "http://localhost:8080/post_pics";
 
         // 獲取表單元素--文章分類、標題、內文元素
-        const postForm = document.getElementById('postForm');
+        // const postForm = document.getElementById('postForm');
 
         // 獲取表單元素-- 欲上傳的檔案
         const picForm = document.getElementById('picForm');
@@ -217,6 +221,7 @@
 
         // 貼文分類按鈕按下去的效果
         document.addEventListener('DOMContentLoaded', function () {
+            //避免在DOM尚未完全加載和解析之前執行代碼
             const shopBtn = document.getElementById('shopBtn');
             const schedBtn = document.getElementById('schedBtn');
             const groupBtn = document.getElementById('groupBtn');
@@ -269,8 +274,6 @@
 
         let fileInputCount = 1;
         // 在上傳檔案的表單元素外面建立一個 FormData 物件
-        const fileFormData = new FormData();
-
         // 新增檔案欄位的onclick事件監聽
         addFileInputButton.addEventListener('click', function () {
             const newFileInput = document.createElement('input');
@@ -279,68 +282,64 @@
             newFileInput.className = 'form-control';
             fileInputsContainer.appendChild(newFileInput);
             fileInputCount++;
-
-            // 在 fileFormData 物件中加入新的檔案欄位
-            fileFormData.append('files', newFileInput.files[0]);
         });
 
-        // 新增類別、標題、內文到article table
-        postForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // 阻止表單默認提交行為
 
-            // 獲取表單欄位的值
+        // 新增類別、標題、內文到article table
+        const postForm = document.getElementById('postForm');
+
+        postForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+
             const articleTitle = document.getElementById("title").value;
             const articleContent = document.getElementById("content").value;
 
 
-            // 建立要傳送的資料物件
-            const dataToSend = {
-                acTypeId: artId, // 使用更新后的 artId 值
+            const postData = {
+                acTypeId: artId,
                 articleTitle: articleTitle,
-                articleContent: articleContent,
-
+                articleContent: articleContent
             };
 
-            // 發送 POST 請求
-            fetch(postURL, {
+
+            fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(dataToSend)
+                body: JSON.stringify(postData)
             })
                 .then(response => response.json())
                 .then(data => {
-                    // 在這裡處理從後端返回的回應資料
+                    // 后端返回的数据
                     console.log(data);
                 })
                 .catch(error => {
-                    // 處理錯誤
+
                     console.error('Error:', error);
                 });
 
 
-            // upload files to article_picture table
-            postForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // 阻止表單默認提交行為
-
-                // 取得上傳檔案
-                const formData = new FormData(picForm);
-
-                // 發送 POST 請求
-                fetch(post_picURL, {
-                    method: "POST",
-                    body: fileFormData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            });
         });
+        picForm.addEventListener('submit', function (e) {
+            event.preventDefault(e);
+
+            const formData = new FormData(picForm);
+
+            fetch(post_picURL, {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
     </script>
 </body>
 
