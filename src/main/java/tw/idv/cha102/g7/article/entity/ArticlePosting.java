@@ -34,8 +34,8 @@ public class ArticlePosting implements Serializable {
     @Column(name="article_con")
     private String articleContent;
 
-    @Column(name = "article_pic")
-    private byte[] cover;
+//    @Column(name = "article_pic")
+//    private byte[] cover;
 
 
 
